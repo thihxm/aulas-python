@@ -1,0 +1,71 @@
+#:kivy 1.11.0
+<Quadro>
+    orientation: 'vertical'
+
+    TextInput:
+        id: display
+    BoxLayout:
+        orientation: 'horizontal'
+        Button:
+            text: '1'
+            on_press: root.add('1')
+        Button:
+            text: '2'
+            on_press: root.add('2')
+        Button:
+            text: '3'
+            on_press: root.add('3')
+        Button:
+            text: 'DEL'
+            on_press: root.deletar()
+        Button:
+            text: 'AC'
+            on_press: root.limpar_tudo()
+    BoxLayout:
+        orientation: 'horizontal'
+        Button:
+            text: '4'
+            on_press: root.add('4')
+        Button:
+            text: '5'
+            on_press: root.add('5')
+        Button:
+            text: '6'
+            on_press: root.add('6')
+        Button:
+            text: '×'
+            on_press: root.multiplicar()
+        Button:
+            text: '/'
+            on_press: root.dividir()
+    BoxLayout:
+        orientation: 'horizontal'
+        Button:
+            text: '7'
+            on_press: root.add('7')
+        Button:
+            text: '8'
+            on_press: root.add('8')
+        Button:
+            text: '9'
+            on_press: root.add('9')
+        Button:
+            text: '+'
+            on_press: root.somar()
+        Button:
+            text: '-'
+            on_press: root.subtrair()
+    BoxLayout:
+        orientation: 'horizontal'
+        Button:
+            text: '0'
+            on_press: root.add('0')
+        Button:
+            text: '( - )'
+            on_press: root.add('-')
+        Button:
+            text: '.'
+            on_press: root.add('.')
+        Button:
+            text: '='
+            on_press: root.igual()

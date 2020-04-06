@@ -1,0 +1,33 @@
+#:kivy 1.11.0
+<Quadro>
+    orientation: 'vertical'
+
+    BoxLayout:
+        orientation: 'horizontal'
+        Label:
+            text: 'Insira o 1º número'
+        TextInput:
+            id: input_1
+    
+    BoxLayout:
+        orientation: 'horizontal'
+        Label:
+            text: 'Insira o 2º número'
+        TextInput:
+            id: input_2
+    BoxLayout:
+        orientation: 'horizontal'
+        Button:
+            text: 'Somar'
+            id: btn_somar
+            on_press: root.somar()
+        Button:
+            text: 'Subtrair'
+            id: btn_subtrair
+            on_press: root.subtrair()
+    BoxLayout:
+        orientation: 'horizontal'
+        Label:
+            text: 'Resultado'
+        TextInput:
+            id: resultado

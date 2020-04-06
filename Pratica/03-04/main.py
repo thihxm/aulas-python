@@ -67,7 +67,6 @@ class Quadro(BoxLayout):
             if(i == 0):
                 self.resultado = self.valores[i]
             else:
-                resultado_anterior = self.resultado
                 if (0 < i <= len(self.operacoes)):
                     if (self.operacoes[i - 1] == '+'):
                         self.resultado += self.valores[i]

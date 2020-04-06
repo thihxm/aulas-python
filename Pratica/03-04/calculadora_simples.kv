@@ -18,13 +18,21 @@
     BoxLayout:
         orientation: 'horizontal'
         Button:
-            text: 'Somar'
+            text: '+'
             id: btn_somar
             on_press: root.somar()
         Button:
-            text: 'Subtrair'
+            text: '-'
             id: btn_subtrair
             on_press: root.subtrair()
+        Button:
+            text: '×'
+            id: btn_multiplicar
+            on_press: root.multiplicar()
+        Button:
+            text: '/'
+            id: btn_subtrair
+            on_press: root.dividir()
     BoxLayout:
         orientation: 'horizontal'
         Label:

@@ -1,0 +1,58 @@
+#:kivy 1.11.0
+<Quadro>
+    orientation: 'vertical'
+
+    FloatLayout:
+        orientation: 'horizontal'
+        size_hint: (1, 0.2)
+        Label:
+            text: 'Minha Calculadora Top'
+            size_hint: (1, 1)
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    BoxLayout:
+        orientation: 'horizontal'
+        size_hint_y: None
+        height: 50
+        Label:
+            text: 'Insira o 1º número'
+            size_hint_x: 0.3
+        TextInput:
+            id: input_1
+            size_hint_y: None
+            height: 30
+            pos_hint: {'center_y': 0.5}
+    BoxLayout:
+        orientation: 'horizontal'
+        size_hint_y: None
+        height: 50
+        Label:
+            text: 'Insira o 2º número'
+            size_hint_x: 0.3
+        TextInput:
+            id: input_2
+            size_hint_y: None
+            height: 30
+            pos_hint: {'center_y': 0.5}
+    FloatLayout:
+        orientation: 'horizontal'
+        Spinner:
+            values: {'soma', 'subtracao', 'multiplicacao', 'divisao'}
+            text: 'soma'
+            id: tipo_operacao
+            on_text: root.mudar_frase(tipo_operacao.text)
+            size_hint: (0.4, None)
+            height: 50
+            pos_hint: {'x': 0.05, 'center_y': 0.5}
+        Button:
+            text: 'Calcular'
+            id: btn_calcular
+            on_press: root.calcular()
+            size_hint: (0.4, 0.8)
+            pos_hint: {'right': 0.95, 'center_y': 0.5}
+    BoxLayout:
+        orientation: 'horizontal'
+        Label:
+            text: 'Resultado'
+            size_hint_x: 0.3
+        TextInput:
+            id: resultado

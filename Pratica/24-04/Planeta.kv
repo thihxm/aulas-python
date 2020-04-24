@@ -2,4 +2,56 @@
 #:import utils kivy.utils
 
 <Principal>:
-    orientation:'vertical'
+  orientation: 'vertical'
+
+  # Área para colocar a imagem do planeta
+  BoxLayout:
+    canvas:
+      Rectangle:
+        size: (300, 300)
+        pos: (0, 100)
+        source: root.imagem_planeta
+
+  # Área para escrever o nome do planeta
+  BoxLayout:
+    size_hint_y: None
+    height: 50
+    Label:
+      id: label_planeta
+      text: 'Carregando...'
+      font_size: 40
+      markup: True
+
+  # Área para os controles do planeta
+  FloatLayout:
+    size_hint_y: None
+    height: 50
+    Spinner:
+      id: spinner_planetas
+      values: {'Terra', 'Lua', 'Saturno', 'Júpiter'}
+      text: 'Terra'
+      size_hint: (None, 0.5)
+      width: 80
+      pos_hint: {'x': 0.02, 'center_y': 0.5}
+      on_text: root.muda_planeta(self.text)
+    CheckBox:
+      id: check_som
+      size_hint: (None, None)
+      width: 30
+      height: 30
+      pos_hint: {'x': 0.3, 'center_y': 0.5}
+      active: True
+      on_active: root.habilitar_som(self.active)
+    Label:
+      id: label_status_som
+      text: 'Desativar Som'
+      size_hint: (None, 0.5)
+      width: 100
+      pos_hint: {'x': 0.43, 'center_y': 0.5}
+    Button:
+      id: btn_sair
+      text: 'Sair'
+      size_hint: (None, 0.5)
+      width: 50
+      pos_hint: {'right': 0.98, 'center_y': 0.5}
+      on_release: root.botao_sair()

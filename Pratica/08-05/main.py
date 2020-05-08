@@ -26,7 +26,7 @@ class Final(Screen):
     if App.get_running_app().resultado == 'vitoria':
       mensagem.text = 'Vitória'
       App.get_running_app().som_vitoria.play()
-    elif App.get_running_app().resultado == 'empate':
+    else:
       mensagem.text = 'Empate'
       App.get_running_app().som_empate.play()
 

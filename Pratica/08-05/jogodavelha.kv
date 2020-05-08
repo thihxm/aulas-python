@@ -1,0 +1,40 @@
+<Jogadores>
+  BoxLayout:
+    orientation: 'vertical'
+
+    Label:
+      text: 'Bem Vindo'
+      font_size: 30
+
+    Button:
+      text: 'Jogar'
+      on_release: root.jogar()
+
+<Jogo>
+  BoxLayout:
+    orientation: 'vertical'
+
+    Button:
+      text: 'Vitória'
+      on_release: root.vitoria()
+    Button:
+      text: 'Empate'
+      on_release: root.empate()
+
+<Final>
+  on_pre_enter: root.verificar_resultado()
+  BoxLayout:
+    orientation: 'vertical'
+
+    Label:
+      text: ''
+      font_size: 30
+      id: mensagem
+
+    Button:
+      text: 'Novo Jogo'
+      on_release: root.novo_jogo()
+
+    Button:
+      text: 'Sair'
+      on_release: root.sair()

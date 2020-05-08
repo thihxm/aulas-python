@@ -29,6 +29,7 @@ class Final(Screen):
     else:
       mensagem.text = 'Empate'
       App.get_running_app().som_empate.play()
+      App.get_running_app().som_empate.seek(9)
 
   def novo_jogo(self):
     self.manager.transition.direction = 'right'

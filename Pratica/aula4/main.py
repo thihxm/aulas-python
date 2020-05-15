@@ -37,6 +37,7 @@ class Jogo(Screen):
         botao.text = ''
 
     App.get_running_app().resultado = ''
+    App.get_running_app().ganhador = ''
     self.total_jogadas = 0
 
     jogador_sorteado = randint(1, 2)
@@ -50,54 +51,54 @@ class Jogo(Screen):
   def verificar_linha(self):
     if self.botoes[0][0].text == self.botoes[0][1].text == self.botoes[0][2].text != '':
       if self.botoes[0][0].text == 'X':
-        App.get_running_app().resultado = App.get_running_app().nome_jogador1
+        App.get_running_app().ganhador = App.get_running_app().nome_jogador1
       else:
-        App.get_running_app().resultado = App.get_running_app().nome_jogador2
+        App.get_running_app().ganhador = App.get_running_app().nome_jogador2
     if self.botoes[1][0].text == self.botoes[1][1].text == self.botoes[1][2].text != '':
       if self.botoes[1][0].text == 'X':
-        App.get_running_app().resultado = App.get_running_app().nome_jogador1
+        App.get_running_app().ganhador = App.get_running_app().nome_jogador1
       else:
-        App.get_running_app().resultado = App.get_running_app().nome_jogador2
+        App.get_running_app().ganhador = App.get_running_app().nome_jogador2
     if self.botoes[2][0].text == self.botoes[2][1].text == self.botoes[2][2].text != '':
       if self.botoes[2][0].text == 'X':
-        App.get_running_app().resultado = App.get_running_app().nome_jogador1
+        App.get_running_app().ganhador = App.get_running_app().nome_jogador1
       else:
-        App.get_running_app().resultado = App.get_running_app().nome_jogador2
+        App.get_running_app().ganhador = App.get_running_app().nome_jogador2
   
   def verificar_coluna(self):
     if self.botoes[0][0].text == self.botoes[1][0].text == self.botoes[2][0].text != '':
       if self.botoes[0][0].text == 'X':
-        App.get_running_app().resultado = App.get_running_app().nome_jogador1
+        App.get_running_app().ganhador = App.get_running_app().nome_jogador1
       else:
-        App.get_running_app().resultado = App.get_running_app().nome_jogador2
+        App.get_running_app().ganhador = App.get_running_app().nome_jogador2
     if self.botoes[0][1].text == self.botoes[1][1].text == self.botoes[2][1].text != '':
       if self.botoes[0][1].text == 'X':
-        App.get_running_app().resultado = App.get_running_app().nome_jogador1
+        App.get_running_app().ganhador = App.get_running_app().nome_jogador1
       else:
-        App.get_running_app().resultado = App.get_running_app().nome_jogador2
+        App.get_running_app().ganhador = App.get_running_app().nome_jogador2
     if self.botoes[0][2].text == self.botoes[1][2].text == self.botoes[2][2].text != '':
       if self.botoes[0][2].text == 'X':
-        App.get_running_app().resultado = App.get_running_app().nome_jogador1
+        App.get_running_app().ganhador = App.get_running_app().nome_jogador1
       else:
-        App.get_running_app().resultado = App.get_running_app().nome_jogador2
+        App.get_running_app().ganhador = App.get_running_app().nome_jogador2
   
   def verificar_diagonal(self):
     if self.botoes[0][0].text == self.botoes[1][1].text == self.botoes[2][2].text != '':
       if self.botoes[0][0].text == 'X':
-        App.get_running_app().resultado = App.get_running_app().nome_jogador1
+        App.get_running_app().ganhador = App.get_running_app().nome_jogador1
       else:
-        App.get_running_app().resultado = App.get_running_app().nome_jogador2
+        App.get_running_app().ganhador = App.get_running_app().nome_jogador2
     if self.botoes[0][2].text == self.botoes[1][1].text == self.botoes[2][0].text != '':
       if self.botoes[0][2].text == 'X':
-        App.get_running_app().resultado = App.get_running_app().nome_jogador1
+        App.get_running_app().ganhador = App.get_running_app().nome_jogador1
       else:
-        App.get_running_app().resultado = App.get_running_app().nome_jogador2
+        App.get_running_app().ganhador = App.get_running_app().nome_jogador2
 
   def verificar_ganhador(self):
     self.verificar_linha()
     self.verificar_coluna()
     self.verificar_diagonal()
-    if App.get_running_app().resultado != '':
+    if App.get_running_app().ganhador != '':
       self.vitoria()
 
   def jogar_posicao(self, linha, coluna):
@@ -134,7 +135,7 @@ class Final(Screen):
   def verificar_resultado(self):
     mensagem = self.ids.mensagem
     if App.get_running_app().resultado == 'vitoria':
-      mensagem.text = 'Vitória'
+      mensagem.text = 'Vitória do(a) ' + App.get_running_app().ganhador
       App.get_running_app().som_vitoria.play()
     else:
       mensagem.text = 'Empate'
@@ -155,6 +156,7 @@ class JogoDaVelhaApp(App):
     Window.size = (300,400)
 
     self.resultado = ''
+    self.ganhador = ''
     self.nome_jogador1 = 'joao'
     self.nome_jogador2 = 'maria'
 

@@ -1,0 +1,120 @@
+<Jogadores>
+  on_pre_enter: root.preencher_jogadores()
+  FloatLayout:
+    width: 300
+    height: 400
+
+    Label:
+      text: 'Bem Vindo'
+      font_size: 30
+      size_hint: (None, 0.5)
+      width: 80
+      pos_hint: {'center_x': 0.5, 'center_y': 0.9}
+
+    Label:
+      text: 'Jogador 1'
+      font_size: 25
+      size_hint: (None, 0.5)
+      width: 80
+      pos_hint: {'center_x': 0.5, 'center_y': 0.75}
+
+    TextInput:
+      id: jogador1
+      size_hint: (0.8, None)
+      height: 30
+      pos_hint: {'center_x': 0.5, 'center_y': 0.65}
+
+    Label:
+      text: 'Jogador 2'
+      font_size: 25
+      size_hint: (None, 0.5)
+      width: 80
+      pos_hint: {'center_x': 0.5, 'center_y': 0.55}
+
+    TextInput:
+      id: jogador2
+      size_hint: (0.8, None)
+      height: 30
+      pos_hint: {'center_x': 0.5, 'center_y': 0.45}
+
+    Button:
+      text: 'Jogar'
+      on_release: root.jogar()
+      size_hint: (0.8, 0.2)
+      pos_hint: {'center_x': 0.5, 'y': 0.1}
+
+<Jogo>
+  on_pre_enter: root.preparar_jogo()
+  BoxLayout:
+    orientation: 'vertical'
+
+    Label:
+      text: ''
+      font_size: 30
+      id: label_jogador_atual
+
+    Label:
+      text: 'é a sua vez'
+      font_size: 25
+
+    GridLayout:
+      size_hint_y: None
+      height: 300
+      cols: 3
+      rows: 3
+      spacing: 3
+      padding: 6
+
+      Button:
+        id: btn00
+        on_release: root.jogar_posicao(0, 0)
+
+      Button:
+        id: btn01
+        on_release: root.jogar_posicao(0, 1)
+
+      Button:
+        id: btn02
+        on_release: root.jogar_posicao(0, 2)
+
+      Button:
+        id: btn10
+        on_release: root.jogar_posicao(1, 0)
+
+      Button:
+        id: btn11
+        on_release: root.jogar_posicao(1, 1)
+
+      Button:
+        id: btn12
+        on_release: root.jogar_posicao(1, 2)
+
+      Button:
+        id: btn20
+        on_release: root.jogar_posicao(2, 0)
+
+      Button:
+        id: btn21
+        on_release: root.jogar_posicao(2, 1)
+
+      Button:
+        id: btn22
+        on_release: root.jogar_posicao(2, 2)
+
+<Final>
+  on_pre_enter: root.verificar_resultado()
+  BoxLayout:
+    orientation: 'vertical'
+
+    Label:
+      text: ''
+      font_size: 30
+      id: mensagem
+
+    Button:
+      text: 'Novo Jogo'
+      on_release: root.novo_jogo()
+
+    Button:
+      text: 'Sair'
+      on_release: root.sair()

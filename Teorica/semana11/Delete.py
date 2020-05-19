@@ -23,4 +23,4 @@ class RemoveDados(object):
 
 removeDados = RemoveDados()
 idExcluir = int(input('Digite o id do contato para excluir: '))
-removerDados.remover(idExcluir)
+removeDados.remover(idExcluir)

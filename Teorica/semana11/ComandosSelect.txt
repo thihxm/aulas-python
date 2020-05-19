@@ -1,0 +1,43 @@
+Comandos em SQL para SGBD SQLite3
+
+
+SELECT * FROM contatos;
+
+SELECT * FROM contatos
+WHERE nome LIKE 'l%';
+
+SELECT * FROM contatos
+WHERE nome LIKE '%j%';
+
+SELECT * FROM emailsContatos;
+
+SELECT c.nome AS NomeContato, 
+        e. email AS EmailContato, 
+        c.limiteCredito AS LimiteCredito
+FROM contatos c, emailsContatos e
+WHERE c.codContato = e.codContato
+ORDER BY c.limiteCredito DESC;
+
+SELECT COUNT (codContato)
+FROM contatos;
+
+SELECT COUNT (codContato)
+FROM contatos
+WHERE limiteCredito > 2000;
+
+SELECT AVG (limiteCredito)
+FROM contatos;
+
+SELECT AVG (limiteCredito)
+FROM contatos
+WHERE limiteCredito > 2000 ;
+
+SELECT SUM (limiteCredito)
+FROM contatos;
+
+SELECT MIN (limiteCredito)
+FROM contatos;
+
+SELECT MAX (limiteCredito)
+FROM contatos;
+

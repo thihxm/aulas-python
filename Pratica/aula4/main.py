@@ -47,59 +47,17 @@ class Jogo(Screen):
       self.jogador_atual = App.get_running_app().nome_jogador2
 
     self.ids.label_jogador_atual.text = self.jogador_atual
-  
-  def verificar_linha(self):
-    if self.botoes[0][0].text == self.botoes[0][1].text == self.botoes[0][2].text != '':
-      if self.botoes[0][0].text == 'X':
-        App.get_running_app().ganhador = App.get_running_app().nome_jogador1
-      else:
-        App.get_running_app().ganhador = App.get_running_app().nome_jogador2
-    if self.botoes[1][0].text == self.botoes[1][1].text == self.botoes[1][2].text != '':
-      if self.botoes[1][0].text == 'X':
-        App.get_running_app().ganhador = App.get_running_app().nome_jogador1
-      else:
-        App.get_running_app().ganhador = App.get_running_app().nome_jogador2
-    if self.botoes[2][0].text == self.botoes[2][1].text == self.botoes[2][2].text != '':
-      if self.botoes[2][0].text == 'X':
-        App.get_running_app().ganhador = App.get_running_app().nome_jogador1
-      else:
-        App.get_running_app().ganhador = App.get_running_app().nome_jogador2
-  
-  def verificar_coluna(self):
-    if self.botoes[0][0].text == self.botoes[1][0].text == self.botoes[2][0].text != '':
-      if self.botoes[0][0].text == 'X':
-        App.get_running_app().ganhador = App.get_running_app().nome_jogador1
-      else:
-        App.get_running_app().ganhador = App.get_running_app().nome_jogador2
-    if self.botoes[0][1].text == self.botoes[1][1].text == self.botoes[2][1].text != '':
-      if self.botoes[0][1].text == 'X':
-        App.get_running_app().ganhador = App.get_running_app().nome_jogador1
-      else:
-        App.get_running_app().ganhador = App.get_running_app().nome_jogador2
-    if self.botoes[0][2].text == self.botoes[1][2].text == self.botoes[2][2].text != '':
-      if self.botoes[0][2].text == 'X':
-        App.get_running_app().ganhador = App.get_running_app().nome_jogador1
-      else:
-        App.get_running_app().ganhador = App.get_running_app().nome_jogador2
-  
-  def verificar_diagonal(self):
-    if self.botoes[0][0].text == self.botoes[1][1].text == self.botoes[2][2].text != '':
-      if self.botoes[0][0].text == 'X':
-        App.get_running_app().ganhador = App.get_running_app().nome_jogador1
-      else:
-        App.get_running_app().ganhador = App.get_running_app().nome_jogador2
-    if self.botoes[0][2].text == self.botoes[1][1].text == self.botoes[2][0].text != '':
-      if self.botoes[0][2].text == 'X':
-        App.get_running_app().ganhador = App.get_running_app().nome_jogador1
-      else:
-        App.get_running_app().ganhador = App.get_running_app().nome_jogador2
 
-  def verificar_ganhador(self):
-    self.verificar_linha()
-    self.verificar_coluna()
-    self.verificar_diagonal()
-    if App.get_running_app().ganhador != '':
-      self.vitoria()
+  def verificar_vitoria(self, linha, coluna):
+    if self.botoes[linha][0].text == self.botoes[linha][1].text == self.botoes[linha][2].text == self.simbolo_atual:
+      return True
+    if self.botoes[0][coluna].text == self.botoes[1][coluna].text == self.botoes[2][coluna].text == self.simbolo_atual:
+      return True
+    if self.botoes[0][0].text == self.botoes[1][1].text == self.botoes[2][2].text == self.simbolo_atual:
+      return True
+    if self.botoes[0][2].text == self.botoes[1][1].text == self.botoes[2][0].text == self.simbolo_atual:
+      return True
+    return False
 
   def jogar_posicao(self, linha, coluna):
     botao_clicado = self.botoes[linha][coluna]
@@ -110,9 +68,9 @@ class Jogo(Screen):
     botao_clicado.text = self.simbolo_atual
     self.total_jogadas += 1
 
-    self.verificar_ganhador()
-
-    if self.total_jogadas == 9:
+    if self.verificar_vitoria(linha, coluna):
+      self.vitoria()
+    elif self.total_jogadas == 9:
       self.empate()
 
     if self.simbolo_atual == 'X':
@@ -125,6 +83,7 @@ class Jogo(Screen):
 
   def vitoria(self):
     App.get_running_app().resultado = 'vitoria'
+    App.get_running_app().ganhador = self.jogador_atual
     self.manager.current = 'final'
 
   def empate(self):

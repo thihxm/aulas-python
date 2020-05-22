@@ -42,8 +42,10 @@ class Jogo(Screen):
 
     jogador_sorteado = randint(1, 2)
     if jogador_sorteado == 1:
+      self.simbolo_atual = 'X'
       self.jogador_atual = App.get_running_app().nome_jogador1
     else:
+      self.simbolo_atual = 'O'
       self.jogador_atual = App.get_running_app().nome_jogador2
 
     self.ids.label_jogador_atual.text = self.jogador_atual
@@ -94,7 +96,7 @@ class Final(Screen):
   def verificar_resultado(self):
     mensagem = self.ids.mensagem
     if App.get_running_app().resultado == 'vitoria':
-      mensagem.text = 'Vitória do(a) ' + App.get_running_app().ganhador
+      mensagem.text = App.get_running_app().ganhador + ' VENCEU!'
       App.get_running_app().som_vitoria.play()
     else:
       mensagem.text = 'Empate'

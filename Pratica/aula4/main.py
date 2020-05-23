@@ -2,6 +2,8 @@ from kivy.app import App
 from kivy.core.window import Window
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.core.audio import SoundLoader
+from kivy.graphics import Rectangle, RoundedRectangle, Color, Ellipse
+from kivy.uix.widget import Widget
 from random import randint
 
 class Jogadores(Screen):
@@ -27,9 +29,15 @@ class Jogo(Screen):
       (self.ids.btn10, self.ids.btn11, self.ids.btn12),
       (self.ids.btn20, self.ids.btn21, self.ids.btn22),
     )
-    self.simbolo_atual = 'X'
+    self.simbolo_X = '[color=#3498db][b]X[/b][/color]'
+    self.simbolo_O = '[color=#e74c3c][b]O[/b][/color]'
+    self.simbolo_atual = self.simbolo_X
     self.jogador_atual = ''
     self.total_jogadas = 0
+    for linha in self.botoes:
+      for botao in linha:
+        botao.font_size = 40
+        botao.markup = True
 
   def preparar_jogo(self):
     for linha in self.botoes:
@@ -42,13 +50,16 @@ class Jogo(Screen):
 
     jogador_sorteado = randint(1, 2)
     if jogador_sorteado == 1:
-      self.simbolo_atual = 'X'
+      self.simbolo_atual = self.simbolo_X
       self.jogador_atual = App.get_running_app().nome_jogador1
     else:
-      self.simbolo_atual = 'O'
+      self.simbolo_atual = self.simbolo_O
       self.jogador_atual = App.get_running_app().nome_jogador2
 
-    self.ids.label_jogador_atual.text = self.jogador_atual
+    if self.jogador_atual == App.get_running_app().nome_jogador1:
+      self.ids.label_jogador_atual.text = '[color=#3498db][b]' + self.jogador_atual.upper() + '[/b][/color]'
+    else:
+      self.ids.label_jogador_atual.text = '[color=#e74c3c][b]' + self.jogador_atual.upper() + '[/b][/color]'
 
   def verificar_vitoria(self, linha, coluna):
     if self.botoes[linha][0].text == self.botoes[linha][1].text == self.botoes[linha][2].text == self.simbolo_atual:
@@ -75,13 +86,16 @@ class Jogo(Screen):
     elif self.total_jogadas == 9:
       self.empate()
 
-    if self.simbolo_atual == 'X':
-      self.simbolo_atual = 'O'
+    if self.simbolo_atual == self.simbolo_X:
+      self.simbolo_atual = self.simbolo_O
       self.jogador_atual = App.get_running_app().nome_jogador2
     else:
-      self.simbolo_atual = 'X'
+      self.simbolo_atual = self.simbolo_X
       self.jogador_atual = App.get_running_app().nome_jogador1
-    self.ids.label_jogador_atual.text = self.jogador_atual
+    if self.jogador_atual == App.get_running_app().nome_jogador1:
+      self.ids.label_jogador_atual.text = '[color=#3498db][b]' + self.jogador_atual.upper() + '[/b][/color]'
+    else:
+      self.ids.label_jogador_atual.text = '[color=#e74c3c][b]' + self.jogador_atual.upper() + '[/b][/color]'
 
   def vitoria(self):
     App.get_running_app().resultado = 'vitoria'
@@ -96,7 +110,10 @@ class Final(Screen):
   def verificar_resultado(self):
     mensagem = self.ids.mensagem
     if App.get_running_app().resultado == 'vitoria':
-      mensagem.text = App.get_running_app().ganhador + ' VENCEU!'
+      if App.get_running_app().ganhador == App.get_running_app().nome_jogador1:
+        mensagem.text = '[color=#3498db][b]' + App.get_running_app().ganhador.upper() + ' VENCEU![/b][/color]'
+      else:
+        mensagem.text = '[color=#e74c3c][b]' + App.get_running_app().ganhador.upper() + ' VENCEU![/b][/color]'
       App.get_running_app().som_vitoria.play()
     else:
       mensagem.text = 'Empate'

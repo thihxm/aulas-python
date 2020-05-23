@@ -38,6 +38,8 @@ class Jogo(Screen):
       for botao in linha:
         botao.font_size = 40
         botao.markup = True
+        botao.background_color = (0.74, 0.76, 0.78, 1)
+        botao.background_normal = ''
 
   def preparar_jogo(self):
     for linha in self.botoes:

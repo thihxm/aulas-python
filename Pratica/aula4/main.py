@@ -116,7 +116,7 @@ class Final(Screen):
         mensagem.text = '[color=#e74c3c][b]' + App.get_running_app().ganhador.upper() + ' VENCEU![/b][/color]'
       App.get_running_app().som_vitoria.play()
     else:
-      mensagem.text = 'Empate'
+      mensagem.text = '[color=#2c3e50][b]EMPATE[/color][/b]'
       App.get_running_app().som_empate.play()
       App.get_running_app().som_empate.seek(9)
 

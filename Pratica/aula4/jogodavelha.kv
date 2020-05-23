@@ -10,7 +10,8 @@
         size: self.size
 
     Label:
-      text: 'Jogo da Velha Top'
+      text: 'JOGO DA VELHA'
+      bold: True
       font_size: 30
       size_hint_y: None
       height: 25
@@ -18,7 +19,8 @@
       color: 0.17, 0.24, 0.31, 1
 
     Label:
-      text: '[color=#3498db]Jogador 1[/color]'
+      text: '[color=#3498db]JOGADOR 1[/color]'
+      bold: True
       font_size: 25
       size_hint_y: None
       height: 25
@@ -32,7 +34,8 @@
       pos_hint: {'center_x': 0.5, 'y': 0.6}
 
     Label:
-      text: 'Jogador 2'
+      text: 'JOGADOR 2'
+      bold: True
       font_size: 25
       size_hint_y: None
       height: 25
@@ -53,8 +56,8 @@
       text: 'JOGAR'
       on_release: root.jogar()
       size_hint: (None, None)
-      width: 150
-      height: 40
+      width: 250
+      height: 100
       pos_hint: {'center_x': 0.5, 'y': 0.05}
 
 <Jogo>
@@ -144,7 +147,7 @@
 
       size_hint_y: None
       height: 25
-      pos_hint: {'top': 0.95}
+      pos_hint: {'top': 0.85}
 
     Button:
       background_color: 0.17, 0.24, 0.31, 1

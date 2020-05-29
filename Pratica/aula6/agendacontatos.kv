@@ -1,0 +1,56 @@
+<Linha>
+    orientation: 'horizontal'
+
+    Button:
+        on_release: root.exibir_detalhes()
+        size_hint_x: None
+        width: self.height # largura = altura
+        canvas:
+            Rectangle:
+                source: 'lupa.png'
+                size: 20, 20
+                pos: self.pos[0] + (self.width - 20) / 2, self.pos[1] + (self.height - 20) / 2
+
+    Label:
+        text: root.nome
+
+    Label:
+        text: root.telefone
+
+<Principal>
+    BoxLayout:
+        orientation: 'vertical'
+
+        RecycleView:
+            id: listagem
+
+            #classe que será utilizada para exibir cada item
+            viewclass: 'Linha'
+
+            #classe que define o layout geral do widget
+            RecycleBoxLayout:
+                orientation: 'vertical'
+
+                #tamanho do layout
+                size_hint_y: None
+                height: self.minimum_height
+
+                #tamanho de cada item
+                default_size_hint: 1, None # 100% largura
+                default_size: None, 40 # 40px altura
+
+        Button:
+            size_hint_y: None
+            height: 35
+            text: 'Novo'
+
+<Visualizar>
+    on_pre_enter: root.preencher_detalhes()
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            id: nome_contato
+
+        Button:
+            text: 'Voltar'
+            on_release: root.voltar()

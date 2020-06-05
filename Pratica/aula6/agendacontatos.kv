@@ -14,12 +14,36 @@
     Label:
         text: root.nome
 
-    Label:
-        text: root.telefone
-
 <Principal>
+    on_pre_enter: root.popular_listagem(txBusca.text)
     BoxLayout:
         orientation: 'vertical'
+        spacing: 5 # Espaço entre os widgets
+        padding: 5 # Espaço entre os widgets e as bordas
+
+        Label:
+            size_hint_y: None
+            height: 30
+            font_size: 25
+            text: 'Contatos'
+
+        BoxLayout:
+            size_hint_y: None
+            height: 35
+
+            TextInput:
+                id: txBusca
+                text: ''
+
+            Button:
+                size_hint_x: None
+                width: 30
+                on_release: root.popular_listagem(txBusca.text)
+                canvas:
+                    Rectangle:
+                        source: 'lupa.png'
+                        size: 20, 20
+                        pos: self.pos[0] + (self.width - 20) / 2, self.pos[1] + (self.height - 20) / 2
 
         RecycleView:
             id: listagem
@@ -43,14 +67,47 @@
             size_hint_y: None
             height: 35
             text: 'Novo'
+            on_release: root.novo_contato()
 
 <Visualizar>
     on_pre_enter: root.preencher_detalhes()
     BoxLayout:
         orientation: 'vertical'
-        Label:
-            id: nome_contato
+        spacing: 5 # Espaço entre os widgets
+        padding: 5 # Espaço entre os widgets e as bordas
 
-        Button:
-            text: 'Voltar'
-            on_release: root.voltar()
+        Label:
+            font_size: 25
+            text: 'Detalhes'
+
+        Label:
+            text: 'Nome'
+        TextInput:
+            id: txNome
+
+        Label:
+            text: 'Telefone'
+        TextInput:
+            id: txTelefone
+
+        Label:
+            text: 'Email'
+        TextInput:
+            id: txEmail
+
+        BoxLayout:
+            spacing: 3
+
+            Button:
+                id: btnEditar
+                text: 'Editar'
+                on_release: root.editar()
+
+            Button:
+                id: btnExcluir
+                text: 'Excluir'
+                on_release: root.excluir()
+
+            Button:
+                text: 'Voltar'
+                on_release: root.voltar()

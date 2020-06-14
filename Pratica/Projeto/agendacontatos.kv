@@ -1,0 +1,218 @@
+<Linha>
+    orientation: 'horizontal'
+    padding: 5 # Espaço entre os widgets e as bordas
+
+    BoxLayout:
+        orientation: 'horizontal'
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 5
+            Label:
+                text: root.nome
+                bold: True
+                font_size: 16
+                text_size: self.size
+            Label:
+                text: root.nome
+                font_size: 14
+                text_size: self.size
+
+        Button:
+            on_release: root.exibir_detalhes()
+            size_hint_y: None
+            size_hint_x: None
+            height: 30
+            width: self.height # largura = altura
+            canvas:
+                Rectangle:
+                    source: 'imagens/info.png'
+                    size: 20, 20
+                    pos: self.pos[0] + (self.width - 20) / 2, self.pos[1] + (self.height - 20) / 2
+
+<Principal>
+    on_pre_enter: root.popular_listagem(txBuscaServicos.text)
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: 5 # Espaço entre os widgets
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: 35
+            padding: 5
+            Label:
+                font_size: 20
+                bold: True
+                text: 'I-Favor'
+                pos_hint: {'top': 0.98, 'center_x': 0.5}
+            Button:
+                text: 'Sair'
+                size_hint: (0.15, None)
+                height: 35
+                on_release: root.popular_listagem(txBuscaServicos.text)
+                pos_hint: {'top': 0.98, 'right': 0.95}
+        TabbedPanel:
+            tab_pos: 'bottom_mid'
+            do_default_tab: False
+            tab_width: 145
+            background_color: (0, 0, 0, 0)
+            TabbedPanelItem:
+                text: 'Serviços'
+                BoxLayout:
+                    orientation: 'vertical'
+                    spacing: 5 # Espaço entre os widgets
+                    padding: 5 # Espaço entre os widgets e as bordas
+
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        size_hint_y: None
+                        height: 55
+                        TextInput:
+                            id: txBuscaServicos
+                            text: ''
+                            hint_text: 'Buscar Serviços'
+                            size_hint: (0.75, None)
+                            height: 35
+                            pos_hint: {'center_y': 0.5}
+
+                        Button:
+                            size_hint: (None, None)
+                            width: 35
+                            height: self.width
+                            pos_hint: {'center_y': 0.5}
+                            on_release: root.popular_listagem(txBuscaServicos.text)
+                            canvas:
+                                Rectangle:
+                                    source: 'imagens/search.png'
+                                    size: 20, 20
+                                    pos: self.pos[0] + (self.width - 20) / 2, self.pos[1] + (self.height - 20) / 2
+
+                    RecycleView:
+                        id: listagemServicos
+                        pos_hint: {'top': 0.75, 'center_x': 0.5}
+
+                        #classe que será utilizada para exibir cada item
+                        viewclass: 'Linha'
+
+                        #classe que define o layout geral do widget
+                        RecycleBoxLayout:
+                            orientation: 'vertical'
+
+                            #tamanho do layout
+                            size_hint_y: None
+                            height: self.minimum_height
+
+                            #tamanho de cada item
+                            default_size_hint: 1, None # 100% largura
+                            default_size: None, 60 # 40px altura
+
+            TabbedPanelItem:
+                text: 'Minhas Solicitações'
+                BoxLayout:
+                    orientation: 'vertical'
+                    spacing: 5 # Espaço entre os widgets
+                    padding: 5 # Espaço entre os widgets e as bordas
+
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        size_hint_y: None
+                        height: 55
+                        TextInput:
+                            id: txBuscaSolicitacoes
+                            text: ''
+                            hint_text: 'Buscar Minhas Solicitações'
+                            size_hint: (0.75, None)
+                            height: 35
+                            pos_hint: {'center_y': 0.5}
+
+                        Button:
+                            size_hint: (None, None)
+                            width: 35
+                            height: self.width
+                            pos_hint: {'center_y': 0.5}
+                            on_release: root.popular_listagem(txBuscaSolicitacoes.text)
+                            canvas:
+                                Rectangle:
+                                    source: 'imagens/search.png'
+                                    size: 20, 20
+                                    pos: self.pos[0] + (self.width - 20) / 2, self.pos[1] + (self.height - 20) / 2
+
+                    RecycleView:
+                        id: listagemSolicitacoes
+                        pos_hint: {'top': 0.75, 'center_x': 0.5}
+
+                        #classe que será utilizada para exibir cada item
+                        viewclass: 'Linha'
+
+                        #classe que define o layout geral do widget
+                        RecycleBoxLayout:
+                            orientation: 'vertical'
+
+                            #tamanho do layout
+                            size_hint_y: None
+                            height: self.minimum_height
+
+                            #tamanho de cada item
+                            default_size_hint: 1, None # 100% largura
+                            default_size: None, 60 # 40px altura
+
+<Visualizar>
+    on_pre_enter: root.preencher_detalhes()
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: 2 # Espaço entre os widgets
+        padding: 5 # Espaço entre os widgets e as bordas
+
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: 35
+            padding: 5
+            Label:
+                font_size: 20
+                bold: True
+                text: 'I-Favor'
+                pos_hint: {'center_x': 0.5}
+
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: 0.8
+            spacing: 5
+            Label:
+                text: 'Nome do Serviço'
+                font_size: 16
+                size_hint_y: (0.4)
+                bold: True
+                text_size: self.size
+                halign: 'left'
+                valign: 'bottom'
+            Label:
+                id: txNomeServico
+                size_hint_y: (0.4)
+                text: 'Nome Prestador'
+                text_size: self.size
+                halign: 'left'
+                valign: 'top'
+
+            Label:
+                id: txNomePrestador
+                text_size: self.size
+                halign: 'left'
+                valign: 'top'
+                size_hint_y: (2)
+
+            Label:
+                id: txPreco
+
+        BoxLayout:
+            spacing: 3
+            size_hint_y: None
+            height: 40
+
+            Button:
+                text: 'Voltar'
+                on_release: root.voltar()
+
+            Button:
+                id: btnAcao
+                text: 'Solicitar'
+                on_release: root.editar()

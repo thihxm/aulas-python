@@ -1,0 +1,63 @@
+<Principal>
+    orientation: 'vertical'
+    padding: 5
+    spacing: 5
+
+    Label:
+        size_hint_y: None
+        height: 25
+        text: 'Incluir Ingredientes'
+        font_size: 20
+
+    Label:
+        size_hint_y: None
+        height: 25
+        text: 'Nome'
+        font_size: 20
+    TextInput:
+        id: nome_ingrediente
+        size_hint_y: None
+        height: 40
+
+    Label:
+        size_hint_y: None
+        height: 25
+        text: 'Quantidade'
+        font_size: 20
+    TextInput:
+        id: quantidade_ingrediente
+        size_hint_y: None
+        height: 40
+
+    Label:
+        size_hint_y: None
+        height: 25
+        text: 'Unidade'
+        font_size: 20
+    Spinner:
+        id: unidade_ingrediente
+        values: {'colher de cha', 'colher de sopa', 'xicara'}
+        text: 'xicara'
+        size_hint_y: None
+        height: 40
+
+    Button:
+        text: 'Salvar'
+        size_hint_y: None
+        height: 40
+        on_release: root.cadastrar_ingrediente()
+
+    Button:
+        text: 'Contar Ingredientes'
+        size_hint_y: None
+        height: 40
+        on_release: root.contar_ingredientes()
+
+    BoxLayout:
+        Label:
+            text: 'Total Cadastrados:'
+            size_hint_x: 0.7
+        Label:
+            text: '0'
+            id: mensagem_total
+            color: (1,0,0,1)

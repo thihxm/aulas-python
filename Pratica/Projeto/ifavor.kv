@@ -8,7 +8,7 @@
             orientation: 'vertical'
             spacing: 5
             Label:
-                text: root.nome
+                text: root.nome_servico
                 bold: True
                 font_size: 16
                 text_size: self.size
@@ -29,7 +29,7 @@
                     size: 20, 20
                     pos: self.pos[0] + (self.width - 20) / 2, self.pos[1] + (self.height - 20) / 2
 
-<Principal>
+<PrincipalCliente>
     on_pre_enter: root.popular_listagem(txBuscaServicos.text)
     BoxLayout:
         orientation: 'vertical'
@@ -48,7 +48,7 @@
                 text: 'Sair'
                 size_hint: (0.15, None)
                 height: 35
-                on_release: root.popular_listagem(txBuscaServicos.text)
+                on_release: root.sair()
                 pos_hint: {'top': 0.98, 'right': 0.95}
         TabbedPanel:
             tab_pos: 'bottom_mid'
@@ -178,7 +178,8 @@
             size_hint_y: 0.8
             spacing: 5
             Label:
-                text: 'Nome do Serviço'
+                text: 'Nome Servico'
+                id: txNomeServico
                 font_size: 16
                 size_hint_y: (0.4)
                 bold: True
@@ -186,15 +187,16 @@
                 halign: 'left'
                 valign: 'bottom'
             Label:
-                id: txNomeServico
-                size_hint_y: (0.4)
                 text: 'Nome Prestador'
+                id: txNomePrestador
+                size_hint_y: (0.4)
                 text_size: self.size
                 halign: 'left'
                 valign: 'top'
 
             Label:
-                id: txNomePrestador
+                text: 'Descricao Servico'
+                id: txDescricaoServico
                 text_size: self.size
                 halign: 'left'
                 valign: 'top'
@@ -216,3 +218,46 @@
                 id: btnAcao
                 text: 'Solicitar'
                 on_release: root.editar()
+
+<Login>
+    FloatLayout:
+        Label:
+            text: 'I-Favor'
+            font_size: 20
+            bold: True
+            size_hint_y: None
+            height: 25
+            pos_hint: {'top': 0.95}
+
+        Label:
+            text: 'Usuário'
+            size_hint_y: None
+            height: 25
+            pos_hint: {'y': 0.7}
+
+        TextInput:
+            id: txUsuario
+            size_hint: (0.8, None)
+            height: 30
+            pos_hint: {'center_x': 0.5, 'y': 0.6}
+
+        Label:
+            text: 'Senha'
+            size_hint_y: None
+            height: 25
+            pos_hint: {'y': 0.45}
+
+        TextInput:
+            id: txSenha
+            size_hint: (0.8, None)
+            height: 30
+            pos_hint: {'center_x': 0.5, 'y': 0.35}
+            password: True
+
+        Button:
+            text: 'Entrar'
+            on_release: root.entrar()
+            size_hint: (None, None)
+            width: 250
+            height: 40
+            pos_hint: {'center_x': 0.5, 'y': 0.05}

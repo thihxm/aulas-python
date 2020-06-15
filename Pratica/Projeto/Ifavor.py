@@ -1,22 +1,14 @@
 import sqlite3
 
-class Cliente(object):
-    def __init__(self, id, nome, telefone, endereco, usuario, senha):
+class Usuario(object):
+    def __init__(self, id, nome, telefone, endereco, usuario, senha, tipo):
         self.id = id
         self.nome = nome
         self.telefone = telefone
         self.endereco = endereco
         self.usuario = usuario
         self.senha = senha
-
-class Prestador(object):
-    def __init__(self, id, nome, telefone, endereco, usuario, senha):
-        self.id = id
-        self.nome = nome
-        self.telefone = telefone
-        self.endereco = endereco
-        self.usuario = usuario
-        self.senha = senha
+        self.tipo = tipo
 
 class Pedido(object):
     def __init__(self, id, idcliente, idservico, aceito, **kwargs):
@@ -28,6 +20,7 @@ class Pedido(object):
         self.descricao_servico = kwargs.get('descricao_servico')
         self.preco_servico = kwargs.get('preco_servico')
         self.nome_prestador = kwargs.get('nome_prestador')
+        self.nome_cliente = kwargs.get('nome_cliente')
 
 class Servico(object):
     def __init__(self, id, nome, descricao, preco, idprestador, **kwargs):
@@ -38,35 +31,68 @@ class Servico(object):
         self.idprestador = idprestador
         self.nome_prestador = kwargs.get('nome_prestador')
 
-class BancodeDadosClientes:
-    def CadastrarCliente(self, novocliente):
+class BancodeDadosUsuarios:
+    def CadastrarCliente(self, novousuario):
         conn = sqlite3.connect('ifavor.db')
         cursor = conn.cursor()
 
         cursor.execute("""
-                INSERT INTO clientes (id, nome, telefone, endereco, usuario, senha)
+                INSERT INTO usuarios (id, nome, telefone, endereco, usuario, senha, tipo)
                 VALUES (?, ?, ?, ?)
                 """,
-                (novocliente.id, novocliente.nome, novocliente.telefone, novocliente.endereco, novocliente.usuario, novocliente.senha)
+                (novousuario.id, novousuario.nome, novousuario.telefone, novousuario.endereco, novousuario.usuario, novousuario.senha, novousuario.tipo)
                 )
 
         conn.commit()
         conn.close()
 
-class BancodeDadosPrestador:
-    def CadastrarPrestador(self, novoprestador):
+    def BuscaUsuarioCredenciais(self, usuario, senha):
         conn = sqlite3.connect('ifavor.db')
         cursor = conn.cursor()
 
         cursor.execute("""
-                INSERT INTO prestadores (id, nome, telefone, endereco, usuario, senha)
-                VALUES (?, ?, ?, ?)
-                """,
-                (novoprestador.id, novoprestador.nome, novoprestador.telefone, novoprestador.endereco, novoprestador.usuario, novoprestador.senha)
+                       SELECT
+                            id,
+                            nome,
+                            telefone,
+                            endereco,
+                            tipo
+                       FROM usuarios
+                       WHERE usuario = '{}' AND senha = '{}'
+                """ .format(usuario, senha)
                 )
 
-        conn.commit()
+        registro = cursor.fetchone()
         conn.close()
+
+        if registro != None:
+            return Usuario(registro[0], registro[1], registro[2], registro[3], None, None, registro[4])
+        else:
+            return None
+
+    def BuscaUsuarioPorId(self, id):
+        conn = sqlite3.connect('ifavor.db')
+        cursor = conn.cursor()
+
+        cursor.execute("""
+                       SELECT
+                            id,
+                            nome,
+                            telefone,
+                            endereco,
+                            tipo
+                       FROM usuarios
+                       WHERE id = {}
+                """ .format(id)
+                )
+
+        registro = cursor.fetchone()
+        conn.close()
+
+        if registro != None:
+            return Usuario(registro[0], registro[1], registro[2], registro[3], None, None, registro[4])
+        else:
+            return None
 
 class BancodeDadosPedidos:
     def SolicitarPedido(self, novopedido):
@@ -99,7 +125,7 @@ class BancodeDadosPedidos:
                             prestadores.nome AS nome_prestador
                        FROM pedidos
                        INNER JOIN servicos ON pedidos.idservico = servicos.id
-                       INNER JOIN prestadores ON servicos.idprestador = prestadores.id
+                       INNER JOIN usuarios AS prestadores ON servicos.idprestador = prestadores.id
                        WHERE servicos.nome LIKE '%{}%' AND pedidos.idcliente = {}
                 """ .format(parteNome, idcliente)
                 )
@@ -127,26 +153,59 @@ class BancodeDadosPedidos:
         cursor = conn.cursor()
 
         cursor.execute("""
-                       SELECT *
+                       SELECT
+                            pedidos.id AS id,
+                            pedidos.idcliente AS idcliente,
+                            pedidos.idservico AS idservico,
+                            pedidos.aceito AS aceito,
+                            servicos.nome AS nome_servico,
+                            servicos.descricao AS descricao_servico,
+                            servicos.preco AS preco_servico,
+                            prestadores.nome AS nome_prestador,
+                            clientes.nome AS nome_cliente
                        FROM pedidos
                        INNER JOIN servicos ON pedidos.idservico = servicos.id
+                       INNER JOIN usuarios AS prestadores ON servicos.idprestador = prestadores.id
+                       INNER JOIN usuarios AS clientes ON pedidos.idcliente = clientes.id
                        WHERE servicos.nome LIKE '%{}%' AND servicos.idprestador = {}
                 """ .format(parteNome, idprestador)
                 )
 
         listagem = list()
         for registro in cursor.fetchall():
-            # (id, idcliente, idservico, aceito)
-            pedido = Pedido(registro[0], registro[1], registro[2], registro[3])
+            pedido = Pedido(
+                registro[0],
+                registro[1],
+                registro[2],
+                registro[3],
+                nome_servico = registro[4],
+                descricao_servico = registro[5],
+                preco_servico = registro[6],
+                nome_prestador = registro[7],
+                nome_cliente = registro[8]
+            )
             listagem.append(pedido)
 
         conn.close()
         return listagem
 
-    def ExcluirPedido(self, pedido):
+    def ExcluirPedido(self, id):
         conn = sqlite3.connect('ifavor.db')
         cursor = conn.cursor()
-        cursor.execute("DELETE FROM pedidos WHERE id = ?", (str(pedido.id),))
+        cursor.execute("DELETE FROM pedidos WHERE id = ?", (str(id),))
+
+        conn.commit()
+        conn.close()
+
+    def AceitarPedido(self, id):
+        conn = sqlite3.connect('ifavor.db')
+        cursor = conn.cursor()
+        cursor.execute("""
+               UPDATE pedidos
+               SET aceito = 1
+               WHERE id = ? """,
+               (str(id))
+        )
 
         conn.commit()
         conn.close()
@@ -167,7 +226,7 @@ class BancodeDadosPedidos:
                             prestadores.nome AS nome_prestador
                        FROM pedidos
                        INNER JOIN servicos ON pedidos.idservico = servicos.id
-                       INNER JOIN prestadores ON servicos.idprestador = prestadores.id
+                       INNER JOIN usuarios AS prestadores ON servicos.idprestador = prestadores.id
                        WHERE pedidos.id = {}
                 """ .format(id)
                 )
@@ -217,7 +276,7 @@ class BancodeDadosServicos:
                             prestadores.id AS idprestador,
                             prestadores.nome AS nome_prestador
                        FROM servicos
-                       INNER JOIN prestadores ON servicos.idprestador = prestadores.id
+                       INNER JOIN usuarios AS prestadores ON servicos.idprestador = prestadores.id
                        WHERE servicos.nome LIKE '%{}%'
                 """ .format(parteNome)
                 )
@@ -236,8 +295,15 @@ class BancodeDadosServicos:
         cursor = conn.cursor()
 
         cursor.execute("""
-                       SELECT *
+                       SELECT
+                            servicos.id AS id,
+                            servicos.nome AS nome,
+                            servicos.descricao AS descricao,
+                            servicos.preco AS preco,
+                            prestadores.id AS idprestador,
+                            prestadores.nome AS nome_prestador
                        FROM servicos
+                       INNER JOIN usuarios AS prestadores ON servicos.idprestador = prestadores.id
                        WHERE servicos.nome LIKE '%{}%' AND servicos.idprestador = {}
                 """ .format(parteNome, idprestador)
                 )
@@ -245,7 +311,7 @@ class BancodeDadosServicos:
         listagem = list()
         for registro in cursor.fetchall():
             # (id, nome, descricao, preco, idprestador)
-            servico = Servico(registro[0], registro[1], registro[2], registro[3], registro[4])
+            servico = Servico(registro[0], registro[1], registro[2], registro[3], registro[4], nome_prestador = registro[5])
             listagem.append(servico)
 
         conn.close()
@@ -286,7 +352,7 @@ class BancodeDadosServicos:
                             prestadores.id AS idprestador,
                             prestadores.nome AS nome_prestador
                        FROM servicos
-                       INNER JOIN prestadores ON servicos.idprestador = prestadores.id
+                       INNER JOIN usuarios AS prestadores ON servicos.idprestador = prestadores.id
                        WHERE servicos.id = {}
                 """ .format(id)
                 )

@@ -7,6 +7,7 @@ from kivy.graphics import Rectangle
 from kivy.properties import StringProperty, NumericProperty
 from random import randint
 from Ifavor import BancodeDadosServicos, Servico, BancodeDadosPedidos, Pedido, BancodeDadosUsuarios, Usuario
+from re import sub as regexSub
 
 class MeuBotao(Button):
     tipo = StringProperty('info')
@@ -61,7 +62,7 @@ class LinhaPrestador(BoxLayout):
                 self.ids.container.remove_widget(widget)
         if self.tipo_botoes == 'editar':
             btnEditar = MeuBotao(tipo = 'edit')
-            # btnEditar.bind(on_release = self.exibir_detalhes)
+            btnEditar.bind(on_release = self.editar_servico)
             self.ids.container.add_widget(btnEditar)
         elif self.tipo_botoes == 'acoes':
             btnAceitar = MeuBotao(tipo = 'check')
@@ -74,6 +75,13 @@ class LinhaPrestador(BoxLayout):
             btnInfo = MeuBotao(tipo = 'info')
             btnInfo.bind(on_release = self.exibir_detalhes_cliente)
             self.ids.container.add_widget(btnInfo)
+
+    def editar_servico(self, *args):
+        App.get_running_app().id_servico_atual = self.id_servico
+        App.get_running_app().id_pedido_atual = self.id_pedido
+
+        App.get_running_app().sm.transition.direction = 'left'
+        App.get_running_app().sm.current = 'detalhesPrestador'
 
     def exibir_detalhes_cliente(self, *args):
         App.get_running_app().id_servico_atual = self.id_servico
@@ -134,10 +142,6 @@ class PrincipalCliente(Screen):
             self.ids.listagemServicos.data.append({ 'id_servico': servico.id, 'nome_servico': servico.nome, 'nome': servico.nome_prestador })
         for pedido in meus_pedidos:
             self.ids.listagemSolicitacoes.data.append({ 'id_pedido': pedido.id, 'nome_servico': pedido.nome_servico, 'nome': pedido.nome_prestador })
-    
-    def novo_contato(self):
-        self.manager.transition.direction = 'left'
-        self.manager.current = 'detalhesCliente'
 
     def sair(self):
         self.manager.transition.direction = 'right'
@@ -146,6 +150,7 @@ class PrincipalCliente(Screen):
         App.get_running_app().id_pedido_atual = 0
         App.get_running_app().id_cliente = 0
         App.get_running_app().id_prestador = 0
+        App.get_running_app().id_cliente_info = 0
 
 class VisualizarCliente(Screen):
     def preencher_detalhes(self):
@@ -182,7 +187,7 @@ class VisualizarCliente(Screen):
         self.manager.transition.direction = 'right'
         self.manager.current = 'principalCliente'
 
-    def editar(self):
+    def solicitar(self):
         db_pedidos = BancodeDadosPedidos()
         if self.ids.btnAcao.text == 'Cancelar':
             if self.pedido_atual:
@@ -228,8 +233,10 @@ class PrincipalPrestador(Screen):
             else:
                 dados['tipo_botoes'] = 'acoes'
                 self.ids.listagemServicos.data.append(dados)
-    
-    def novo_contato(self):
+
+    def novo_servico(self):
+        App.get_running_app().id_servico_atual = 0
+
         self.manager.transition.direction = 'left'
         self.manager.current = 'detalhesPrestador'
 
@@ -240,6 +247,7 @@ class PrincipalPrestador(Screen):
         App.get_running_app().id_pedido_atual = 0
         App.get_running_app().id_cliente = 0
         App.get_running_app().id_prestador = 0
+        App.get_running_app().id_cliente_info = 0
 
 class VisualizarPrestador(Screen):
     def preencher_detalhes(self):
@@ -251,27 +259,14 @@ class VisualizarPrestador(Screen):
             db_servicos = BancodeDadosServicos()
             self.servico_atual = db_servicos.BuscaServicoPorId(self.id_servico)
             self.ids.txNomeServico.text = self.servico_atual.nome
-            self.ids.txNomePrestador.text = self.servico_atual.nome_prestador
             self.ids.txDescricaoServico.text = self.servico_atual.descricao
             self.ids.txPreco.text = f'R$ {self.servico_atual.preco}'
-            self.pedido_atual = None
-            self.alterar_botao_pedido(False)
-        elif self.id_pedido != 0:
-            db_pedidos = BancodeDadosPedidos()
-            self.pedido_atual = db_pedidos.BuscaPedidoPorId(self.id_pedido)
-            self.ids.txNomeServico.text = self.pedido_atual.nome_servico
-            self.ids.txNomePrestador.text = self.pedido_atual.nome_prestador
-            self.ids.txDescricaoServico.text = self.pedido_atual.descricao_servico
-            self.ids.txPreco.text = f'R$ {self.pedido_atual.preco_servico}'
-            self.servico_atual = None
             self.bloquear_campos(True)
         else:
             self.ids.txNomeServico.text = ''
-            self.ids.txNomePrestador.text = ''
             self.ids.txDescricaoServico.text = ''
             self.ids.txPreco.text = ''
             self.servico_atual = None
-            self.pedido_atual = None
             self.bloquear_campos(False)
 
     def bloquear_campos(self, bloquear):
@@ -287,16 +282,36 @@ class VisualizarPrestador(Screen):
         self.manager.transition.direction = 'right'
         self.manager.current = 'principalPrestador'
 
+    def converter_preco(self):
+        preco = self.ids.txPreco.text
+        preco = regexSub('(?!\,)(\D)+', '', preco)
+        preco = float(preco.replace('.', '').replace(',', '.'))
+        return '{:.2f}'.format(preco).replace('.', ',')
+
     def editar(self):
-        db_pedidos = BancodeDadosPedidos()
-        if self.ids.btnAcao.text == 'Cancelar':
-            if self.pedido_atual:
-                db_pedidos.ExcluirPedido(self.pedido_atual.id)
-                self.voltar()
+        db_servicos = BancodeDadosServicos()
+        if self.ids.btnAcao.text == 'Editar':
+            self.bloquear_campos(False)
         else:
             if self.servico_atual:
-                novo_pedido = Pedido(None, self.id_cliente, self.id_servico, False)
-                db_pedidos.SolicitarPedido(novo_pedido)
+                servico_atualizado = Servico(
+                    self.id_servico,
+                    self.ids.txNomeServico.text,
+                    self.ids.txDescricaoServico.text,
+                    self.converter_preco(),
+                    self.id_prestador
+                )
+                db_servicos.AtualizarServico(servico_atualizado)
+                self.voltar()
+            else:
+                novo_servico = Servico(
+                    None,
+                    self.ids.txNomeServico.text,
+                    self.ids.txDescricaoServico.text,
+                    self.converter_preco(),
+                    self.id_prestador
+                )
+                db_servicos.CadastrarServico(novo_servico)
                 self.voltar()
 
 class PrestadorInfoCliente(Screen):

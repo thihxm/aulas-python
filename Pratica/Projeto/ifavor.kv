@@ -239,7 +239,7 @@
             Button:
                 id: btnAcao
                 text: 'Solicitar'
-                on_release: root.editar()
+                on_release: root.solicitar()
 
 <PrincipalPrestador>
     on_pre_enter: root.popular_listagem(txBuscaServicos.text)
@@ -337,7 +337,7 @@
                             size_hint_y: None
                             height: 35
                             pos_hint: {'center_y': 0.5}
-                            on_release: root.popular_listagem(txBuscaMeusServicos.text)
+                            on_release: root.novo_servico()
 
                     RecycleView:
                         id: listagemMeusServicos
@@ -381,32 +381,25 @@
             size_hint_y: 0.8
             spacing: 5
             Label:
-                text: 'Nome Servico'
+                text: 'Nome do Servico'
+                text_size: self.size
+            TextInput:
                 id: txNomeServico
-                font_size: 16
-                size_hint_y: (0.4)
-                bold: True
-                text_size: self.size
-                halign: 'left'
-                valign: 'bottom'
-            Label:
-                text: 'Nome Prestador'
-                id: txNomePrestador
-                size_hint_y: (0.4)
-                text_size: self.size
-                halign: 'left'
-                valign: 'top'
 
             Label:
-                text: 'Descricao Servico'
-                id: txDescricaoServico
+                text: 'Descrição'
                 text_size: self.size
-                halign: 'left'
+            TextInput:
+                id: txDescricaoServico
                 valign: 'top'
                 size_hint_y: (2)
 
             Label:
+                text: 'Preço'
+                text_size: self.size
+            TextInput:
                 id: txPreco
+                text_size: self.size
 
         BoxLayout:
             spacing: 3

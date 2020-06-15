@@ -255,7 +255,7 @@ class BancodeDadosServicos:
 
         cursor.execute("""
                 INSERT INTO servicos (id, nome, descricao, preco, idprestador)
-                VALUES (?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?)
                 """,
                 (novoservico.id, novoservico.nome, novoservico.descricao, novoservico.preco, novoservico.idprestador)
                 )

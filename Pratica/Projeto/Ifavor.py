@@ -7,7 +7,7 @@ class Usuario(object):
         self.telefone = telefone
         self.endereco = endereco
         self.usuario = usuario
-        self.senha = senha
+        self.__senha = senha
         self.tipo = tipo
 
 class Pedido(object):

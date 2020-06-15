@@ -209,17 +209,17 @@ class PrincipalPrestador(Screen):
 
         db_servicos = BancodeDadosServicos()
         db_pedidos = BancodeDadosPedidos()
-        servicos = db_servicos.ListarServicosPorNomeEPrestador(busca, App.get_running_app().id_prestador)
-        meus_pedidos = db_pedidos.ListarPedidosPorNomeEPrestador(busca, App.get_running_app().id_prestador)
+        meus_servicos = db_servicos.ListarServicosPorNomeEPrestador(busca, App.get_running_app().id_prestador)
+        servicos = db_pedidos.ListarPedidosPorNomeEPrestador(busca, App.get_running_app().id_prestador)
 
-        for servico in servicos:
+        for meu_servico in meus_servicos:
             self.ids.listagemMeusServicos.data.append({
-                'id_servico': servico.id,
-                'nome_servico': servico.nome,
-                'nome': servico.nome_prestador,
+                'id_servico': meu_servico.id,
+                'nome_servico': meu_servico.nome,
+                'nome': meu_servico.nome_prestador,
                 'tipo_botoes': 'editar'
             })
-        for pedido in meus_pedidos:
+        for pedido in servicos:
             dados = {
                 'id_pedido': pedido.id,
                 'pedido_id_servico': pedido.idservico,

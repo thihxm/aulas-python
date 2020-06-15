@@ -252,7 +252,6 @@ class PrincipalPrestador(Screen):
 class VisualizarPrestador(Screen):
     def preencher_detalhes(self):
         self.id_servico = App.get_running_app().id_servico_atual
-        self.id_pedido = App.get_running_app().id_pedido_atual
         self.id_prestador = App.get_running_app().id_prestador
 
         if self.id_servico != 0:

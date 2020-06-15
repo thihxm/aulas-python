@@ -288,10 +288,10 @@ class VisualizarPrestador(Screen):
         return '{:.2f}'.format(preco).replace('.', ',')
 
     def editar(self):
-        db_servicos = BancodeDadosServicos()
         if self.ids.btnAcao.text == 'Editar':
             self.bloquear_campos(False)
         else:
+            db_servicos = BancodeDadosServicos()
             if self.servico_atual:
                 servico_atualizado = Servico(
                     self.id_servico,
